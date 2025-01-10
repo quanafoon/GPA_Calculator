@@ -74,6 +74,7 @@
             newDiv.appendChild(addIcon);
             const element = document.getElementById("set");
             element.insertBefore(newDiv, submit);
+            input.focus();
         }
     </script>
     <script>
@@ -89,7 +90,7 @@
             })
             .then(response => response.json())
             .then(data => {
-                document.getElementById("result").innerText = `${data.toFixed(1)}`;
+                document.getElementById("result").innerText = `${data.toFixed(2)}`;
             })
             .catch(error => {
                 console.error('Error sending data:', error);

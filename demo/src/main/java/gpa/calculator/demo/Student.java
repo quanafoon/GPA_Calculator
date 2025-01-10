@@ -30,9 +30,9 @@ public class Student {
     public double calculateGPA(){
         double total=0.0;
         for(Grade grade : grades){
-            total += grade.getQualityPoint();
+            total += (grade.getQualityPoint() *3);
         }
-        this.GPA =  total/classes;
+        this.GPA =  total/(classes*3);
         return GPA;
     }
 }
