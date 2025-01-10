@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">    
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <title>Calculator</title>
+</head>
+
+<body>
+    <style>
+        h1{
+            justify-self:center;
+        }
+        #set{
+            margin-top:10vh;
+        }
+        .container{
+            display:flex;
+        }
+        input{
+            max-width:30vw;
+            margin-left:5vw;
+
+        }
+        .material-icons{
+            margin-left:5vw;
+            cursor:pointer;
+        }
+        #submit{
+            margin-left:15vw;
+        }
+    </style>
+    <h1>GPA Calculator</h1>
+    <div id="set">
+        <div class="container">
+            <input id="grade" placeholder="Enter grade">
+            <i id="add" onclick="addElement()" class="material-icons">add_circle</i>
+        </div>
+        <button id="submit" onclick="calculate()" class="btn">Submit</button>
+        <a href="/calculator"><button class="btn" style="background-color:red">Reset</button></a>
+
+    </div>
+    <p id="result"></p>
+
+    <script>
+        function calculate(){
+            let letter = encodeURIComponent(document.getElementById("grade").value);
+            fetch(`/point?letter=${letter}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("result").innerText = `${data.toFixed(1)}`;
+                })
+                .catch(error => {
+                    // Handle any errors
+                    console.error('Error:', error);
+                    document.getElementById("result").innerText = "An error occurred.";
+                });
+        }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+        function addElement(){
+            const inputs = document.querySelectorAll("#set input");
+            const lastInput = inputs[inputs.length - 1];
+
+            if (lastInput.value.trim() === "") {
+                lastInput.focus();
+                //alert("Please fill out the current field before adding another.");
+                M.toast({html:"Enter a grade"});
+                return;
+            }
+            document.getElementById("add").remove();
+            const newDiv = document.createElement("div");
+            const submit = document.getElementById("submit");
+            const input = document.createElement("input");
+            const addIcon = document.createElement("i");
+            addIcon.classList.add("material-icons");
+            addIcon.innerHTML = "add_circle";
+            addIcon.id="add";
+            addIcon.addEventListener("click", addElement);
+            input.setAttribute("placeholder","Enter Grade");
+            newDiv.classList.add("container");
+            newDiv.appendChild(input);
+            newDiv.appendChild(addIcon);
+            const element = document.getElementById("set");
+            element.insertBefore(newDiv, submit);
+        }
+    </script>
+    <script>
+        M.AutoInit();
+    </script>
+</body>
+</html>
