@@ -17,6 +17,7 @@
         }
         .container{
             display:flex;
+            align-items:center
         }
         input{
             max-width:30vw;
@@ -30,6 +31,10 @@
         #submit{
             margin-left:15vw;
         }
+        #result{
+            margin-left:15vw;
+            color:#113a6f;
+        }
     </style>
     <h1>GPA Calculator</h1>
     <div id="set">
@@ -41,23 +46,8 @@
         <a href="/calculator"><button class="btn" style="background-color:red">Reset</button></a>
 
     </div>
-    <p id="result"></p>
+    <h3 id="result"></h3>
 
-    <script>
-        function calculate(){
-            let letter = encodeURIComponent(document.getElementById("grade").value);
-            fetch(`/point?letter=${letter}`)
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById("result").innerText = `${data.toFixed(1)}`;
-                })
-                .catch(error => {
-                    // Handle any errors
-                    console.error('Error:', error);
-                    document.getElementById("result").innerText = "An error occurred.";
-                });
-        }
-    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script>
         function addElement(){
@@ -66,7 +56,6 @@
 
             if (lastInput.value.trim() === "") {
                 lastInput.focus();
-                //alert("Please fill out the current field before adding another.");
                 M.toast({html:"Enter a grade"});
                 return;
             }
@@ -85,6 +74,26 @@
             newDiv.appendChild(addIcon);
             const element = document.getElementById("set");
             element.insertBefore(newDiv, submit);
+        }
+    </script>
+    <script>
+        function calculate(){
+            const grades = document.querySelectorAll("input")
+            const arr = Array.from(grades).map(input => input.value);
+            fetch ("/conversion", {
+                method: 'POST',
+                headers:{
+                    'Content-type': 'application/json',
+                },
+                body: JSON.stringify(arr),
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("result").innerText = `${data.toFixed(1)}`;
+            })
+            .catch(error => {
+                console.error('Error sending data:', error);
+            });
         }
     </script>
     <script>

@@ -8,6 +8,14 @@ public class Grade {
         this.grade = grade;
     }
 
+    public String getGrade() {
+        return grade;
+    }
+    
+    public void setGrade(String grade) {
+        this.grade = grade;
+    }
+
     public double getQualityPoint(){
         switch(grade){
             case "A+": return 4.3;
@@ -24,4 +32,7 @@ public class Grade {
         }
         return 0.0;
     }
+
+    
+
 }
