@@ -45,6 +45,11 @@
         #help{
             position:absolute;
             right:30vw;
+            align-items:center;
+        }
+        #help-icon{
+            color:black;
+            margin-left:0;
         }
     </style>
     <h1>GPA Calculator</h1>
@@ -67,9 +72,9 @@
                 <button style="position:absolute; right:0; top:0; background-color:red" class="btn-small material-icons modal-close">close</button>
             </div>
             <p>- Enter grades into the fields</p>
-            <p>- Add fields using the + icon and remove entries using the - icon</p>
+            <p>- Add fields using <i id="help-icon" class="tiny material-icons"> add_circle </i> and remove entries using <i id="help-icon" class="tiny material-icons"> remove_circle </i></p>
             <p>- Acceptable grades - A+, A, A-, B+, B, B-, C+, C, C-, F1, F2, F3 </p>
-            <p>- Click "Submit" to calculate the GPA and "Reset" to reset all entries</p>
+            <p>- Click <button class="btn-small">Submit</button> to calculate the GPA and <button style="background-color:red" class="btn-small">Reset</button> to reset all entries</p>
         </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
