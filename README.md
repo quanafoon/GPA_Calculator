@@ -5,7 +5,7 @@ This is a GPA calculator that utilizes:
 - A Java backend that was built using Spring Boot for calculations
 - Html and javascript for the dynamic insertion and removal of courses
 
-###The application uses this grading scheme:
+### The application uses this grading scheme:
 
 **Assumes that each course carries three credits**
 
