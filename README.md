@@ -2,8 +2,8 @@
 
 
 This is a GPA calculator that utilizes:
-- A Java backend that was built using Spring Boot for Calculations
-- html and javascript for the dynamic insertion and removal of courses
+- A Java backend that was built using Spring Boot for calculations
+- Html and javascript for the dynamic insertion and removal of courses
 
 The application uses this grading scheme:
 
