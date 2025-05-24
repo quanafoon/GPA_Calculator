@@ -22,9 +22,9 @@ Points      3.7
 Range       75 - 79% 
   
   
-Grade     B+ 
-Points    3.3 
-Range     70 - 74% 
+Grade       B+ 
+Points      3.3 
+Range       70 - 74% 
   
   
 Grade       B 
