@@ -1,7 +1,11 @@
 # GPA CALCULATOR
 
 
-This is a GPA calculator that follows this grading scheme:
+This is a GPA calculator that utilizes:
+- A Java backend that was built using Spring Boot for Calculations
+- html and javascript for the dynamic insertion and removal of courses
+
+The application uses this grading scheme:
 
 **Assumes that each course carries three credits**
 
@@ -47,6 +51,3 @@ Points      2.0
 Range       50 - 54% 
                     
 ```
-The application utilizes:
-- A Java backend that was built using Spring Boot for Calculations
-- html and javascript for the dynamic insertion and removal of courses
