@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">    
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <title>Calculator</title>
+</head>
+
+<body>
+    <style>
+        h1{
+            justify-self:center;
+            color:white;
+        }
+        #set{
+            margin-top:10vh;
+            
+        }
+        .container{
+            display:flex;
+            align-items:center
+        }
+        input{
+            max-width:30vw;
+            margin-left:5vw;
+            color:white;
+        }
+        .material-icons{
+            margin-left:3vw;
+            cursor:pointer;
+            color:white;
+        }
+        #submit{
+            margin-left:15vw;
+        }
+        #result{
+            margin-left:15vw;
+            color:#6062ff;
+        }
+        body{
+            background-image: url(images/peakpx.jpg);
+            background-size:cover;
+        }
+        #help{
+            position:absolute;
+            right:30vw;
+            align-items:center;
+        }
+        #help-icon{
+            color:black;
+            margin-left:0;
+        }
+    </style>
+    <a href="/"><h1>GPA Calculator</h1></a>
+    <div id="set">
+        <div id="first" class="container">
+            <input id="grade" placeholder="Enter grade">
+            <i id="add" onclick="addElement()" class="material-icons">add_circle</i>
+            <i id="help" class="material-icons modal-trigger" data-target="modal-1"> info </i>
+        </div>
+        <button id="submit" onclick="calculate()" class="btn">Submit</button>
+        <a href="/calculator"><button class="btn" style="background-color:red">Reset</button></a>
+
+    </div>
+    <h3 id="result"></h3>
+
+    <div id="modal-1" class="modal">
+        <div class="modal-content"> 
+            <div style="display:flex">
+                <h4> Help </h4>
+                <button style="position:absolute; right:0; top:0; background-color:red" class="btn-small material-icons modal-close">close</button>
+            </div>
+            <p>- Enter grades into the fields</p>
+            <p>- Add fields using <i id="help-icon" class="tiny material-icons"> add_circle </i> and remove entries using <i id="help-icon" class="tiny material-icons"> remove_circle </i></p>
+            <p>- Acceptable grades - A+, A, A-, B+, B, B-, C+, C, C-, F1, F2, F3 </p>
+            <p>- Click <button class="btn-small">Submit</button> to calculate the GPA and <button style="background-color:red" class="btn-small">Reset</button> to reset all entries</p>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+
+        var count = 1;
+        const acceptable= ["A+", "A", "A-", "B+", "B", "B-", "C+", "C", "C-", "F1", "F2", "F3",
+                            "a+", "a", "a-", "b+", "b", "b-", "c+", "c", "c-", "f1", "f2", "f3"];
+
+        function addElement(){
+            const inputs = document.querySelectorAll("#set input");
+            const lastInput = inputs[inputs.length - 1];
+
+            if (lastInput.value.trim() === "") {
+                lastInput.focus();
+                M.toast({html:"Enter a grade"});
+                return;
+            }
+            if(!acceptable.includes(lastInput.value)){
+                M.toast({html:`Invalid Grade - ${lastInput.value}`});
+                return;
+            }
+            const prev = document.getElementById("curr");
+            update();
+            if(prev){
+                count = count + 1;
+                prev.id = `prev-${count}`;
+                document.getElementById("minus").remove();
+            }
+            document.getElementById("add").remove();
+            const newDiv = document.createElement("div");
+            const submit = document.getElementById("submit");
+            const input = document.createElement("input");
+            const addIcon = document.createElement("i");
+            const removeIcon = document.createElement("i");
+            addIcon.classList.add("material-icons");
+            removeIcon.classList.add("material-icons");
+            addIcon.innerHTML = "add_circle";
+            removeIcon.innerHTML = "remove_circle";
+            addIcon.id="add";
+            removeIcon.id="minus"
+            addIcon.addEventListener("click", addElement);
+            removeIcon.addEventListener("click", removeElement);
+            input.setAttribute("placeholder","Enter Grade");
+            newDiv.classList.add("container");
+            newDiv.appendChild(input);
+            newDiv.appendChild(addIcon);
+            newDiv.appendChild(removeIcon);
+            newDiv.id = "curr";
+            const element = document.getElementById("set");
+            element.insertBefore(newDiv, submit);
+            input.focus();
+        }
+    
+        function removeElement(){
+            document.getElementById("curr").remove();
+            const addIcon = document.createElement("i");
+            const removeIcon = document.createElement("i");
+            addIcon.classList.add("material-icons");
+            removeIcon.classList.add("material-icons");
+            addIcon.innerHTML = "add_circle";
+            removeIcon.innerHTML = "remove_circle";
+            addIcon.id="add";
+            removeIcon.id="minus"
+            addIcon.addEventListener("click", addElement);
+            removeIcon.addEventListener("click", removeElement);
+            const curr = document.getElementById(`prev-${count}`);
+            count = count - 1;
+            if(curr){
+                curr.id="curr";
+                curr.appendChild(addIcon);
+                curr.appendChild(removeIcon);
+            }else{
+                const first = document.getElementById("first");
+                first.appendChild(addIcon);
+            }
+            update();
+        }
+    
+        function calculate(){
+            const inputs = document.querySelectorAll("input")
+            for(i=0; i < inputs.length; i++){
+                if (inputs[i].value.trim() === "") {
+                    inputs[i].focus();
+                    M.toast({html:"Missing a grade"});
+                    return;
+                }
+                if(!acceptable.includes(inputs[i].value)){
+                    M.toast({html:`Invalid Grade - ${inputs[i].value}`});
+                    return;
+                }
+            }
+            const arr = Array.from(inputs).map(input => input.value);
+            fetch ("/conversion", {
+                method: 'POST',
+                headers:{
+                    'Content-type': 'application/json',
+                },
+                body: JSON.stringify(arr),
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("result").innerText = `${data.toFixed(2)}`;
+            })
+            .catch(error => {
+                console.error('Error sending data:', error);
+            });
+        }
+
+        function update(){
+            const gpa = document.getElementById("result").innerText;
+            if(gpa === ""){
+                return;
+            }
+            else{
+                calculate();
+            }
+        }
+    </script>
+    <script>
+        M.AutoInit();
+        document.addEventListener('DOMContentLoaded', function() {
+            var elems = document.querySelectorAll('.modal');
+            var instances = M.Modal.init(elems, options);
+          });
+    </script>
+</body>
+</html>
