@@ -1,6 +1,6 @@
 # GPA CALCULATOR
 
-```Web Application - https://gpa-calculator-cqxc.onrender.com```
+**Web Application - https://gpa-calculator-cqxc.onrender.com**
 
 This is a GPA calculator that utilizes:
 - A Java backend that was built using Spring Boot for calculations
